@@ -60,7 +60,7 @@ export default {
     isFetching: false,
     isError: false,
     errorMessage: null,
-    autoSignIn: true
+    autoSignIn: null
   }),
   mounted: function() {
     this.$store.commit("setAppBarTitle", "Вход");

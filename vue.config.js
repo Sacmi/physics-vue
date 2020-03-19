@@ -2,10 +2,23 @@ const JavaScriptObfuscator = require("webpack-obfuscator");
 
 module.exports = {
   transpileDependencies: ["vuetify"],
+
   configureWebpack: {
     devtool: "source-map"
-    //plugins: [new JavaScriptObfuscator()]
+    //plugins: [new JavaScriptObfuscator({ selfDefending: true })]
   },
-  //publicPath: "https://sacmi.github.io/abph-release/",
-  productionSourceMap: false
+
+  //publicPath: "/physics-client/",
+  productionSourceMap: false,
+
+  pwa: {
+    themeColor: "#1976d2",
+    msTileColor: "#1976d2",
+    appleMobileWebAppStatusBarStyle: "black",
+    manifestOptions: {
+      background_color: "#1976d2"
+    },
+    name: "Тесты по физике"
+  },
+  parallel: 4
 };

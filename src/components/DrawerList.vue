@@ -3,10 +3,10 @@
     <v-list-item>
       <v-list-item-content>
         <v-list-item-title class="title">
-          physics-client
+          {{ $store.state.session.email }}
         </v-list-item-title>
         <v-list-item-subtitle>
-          Вошли как {{ $store.state.session.email }}
+          http://test.apbphysics.ru/
         </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>

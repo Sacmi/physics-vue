@@ -13,12 +13,18 @@ const routes = [
   {
     path: "/signin",
     name: "Login",
-    component: () => import("@/views/Login.vue")
+    component: () => import(/* webpackChunkName: "base" */ "@/views/Login.vue")
   },
   {
     path: "/task/:id",
     name: "Task",
     component: () => import("@/views/Task.vue")
+  },
+  {
+    path: "/offline",
+    name: "Offline",
+    component: () =>
+      import(/* webpackChunkName: "base" */ "@/views/Offline.vue")
   },
   {
     path: "/logout",
@@ -40,10 +46,22 @@ const router = new VueRouter({
   routes
 });
 
+/* TODO: переделать эту ссанину */
 router.beforeEach((to, from, next) => {
+  const networkStatus = navigator.onLine;
+  const { name } = to;
+
+  if (!networkStatus && name != "Offline") {
+    next({ name: "Offline" });
+  }
+
   const { verificationCookie, authCookie } = store.state.session;
 
-  if ((!verificationCookie || !authCookie) && to.name != "Login")
+  if (
+    (!verificationCookie || !authCookie) &&
+    name != "Login" &&
+    name != "Offline"
+  )
     next({ name: "Login" });
   else next();
 });

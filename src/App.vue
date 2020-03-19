@@ -5,7 +5,7 @@
       <v-toolbar-title>{{ appBarTitle }}</v-toolbar-title>
     </v-app-bar>
 
-    <v-navigation-drawer temporary v-model="drawer" app>
+    <v-navigation-drawer v-model="drawer" app touchless temporary>
       <DrawerList />
     </v-navigation-drawer>
 
@@ -27,7 +27,8 @@ export default {
   },
   computed: {
     showDrawer: function() {
-      return this.$route.name === "Login" ? false : true;
+      const { name } = this.$route;
+      return name === "Login" || name === "Offline" ? false : true;
     },
     ...mapState({ appBarTitle: "appBarTitle" })
   }
