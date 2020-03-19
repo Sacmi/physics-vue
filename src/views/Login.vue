@@ -80,28 +80,28 @@ export default {
     async submit() {
       await this.$v.$touch();
 
-      if (this.valid) {
-        this.isFetching = true;
-        const fetched = await apiFetch("getAuthData", {
-          email: this.email,
-          password: this.password
-        });
-        const res = await fetched.json();
+      if (!this.valid) return;
 
-        if (fetched.status !== 200 || !res.authCookie) {
-          this.errorMessage = res.message
-            ? res.message
-            : "Неверный логин или пароль";
-          this.isError = true;
-          this.isFetching = false;
-          return;
-        }
-        const { authCookie, verificationCookie } = res;
+      this.isFetching = true;
+      const fetched = await apiFetch("getAuthData", {
+        email: this.email,
+        password: this.password
+      });
+      const res = await fetched.json();
 
-        this.$store.commit("setCookies", { authCookie, verificationCookie });
-        this.$router.push({ name: "Home" });
+      if (fetched.status !== 200 || !res.authCookie) {
+        this.errorMessage = res.message
+          ? res.message
+          : "Неверный логин или пароль";
+        this.isError = true;
         this.isFetching = false;
+        return;
       }
+      const { authCookie, verificationCookie } = res;
+
+      this.$store.commit("setCookies", { authCookie, verificationCookie });
+      this.$router.push({ name: "Home" });
+      this.isFetching = false;
     }
   }
 };

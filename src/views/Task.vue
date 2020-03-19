@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div v-show="!loader.isLoading">
+    <v-form v-model="valid" v-show="!loader.isLoading">
       <v-img :src="image" transition="fade-transition" contain></v-img>
       <v-text-field
         v-model="answer"
@@ -22,14 +22,14 @@
       <v-btn block class="button" @click="loadTask" :disabled="loader.isLoading"
         >Пропустить</v-btn
       >
-    </div>
+    </v-form>
     <v-snackbar v-model="loader.isLoading" bottom :timeout="0">{{
       loader.text
     }}</v-snackbar>
     <v-snackbar :timeout="5000" bottom v-model="error.isError" color="red">{{
       error.errorMessage
     }}</v-snackbar>
-    <Modal v-model="modal" />
+    <Modal v-model="modalAction" :show="modal" />
   </v-container>
 </template>
 <script>
@@ -63,24 +63,32 @@ export default {
     answer: "",
     sessionCookie: null,
 
-    modal: false
+    modal: false,
+    modalAction: "",
+    valid: null
   }),
   computed: {
-    answerErrors() {
+    answerErrors: function() {
       const errors = [];
+
       if (!this.$v.answer.$dirty) return errors;
       !this.$v.answer.numeric && errors.push("Ответ должен быть числом");
       !this.$v.answer.required && errors.push("Это поле необходимо.");
+
       return errors;
     }
   },
-  mounted() {
+  mounted: function() {
     this.loadTask();
   },
   methods: {
-    async submit() {
+    submit: async function() {
+      await this.$v.$touch();
+
+      if (!this.valid) return;
+
       this.loader.text = "Отправка ответа...";
-      this.isLoading = true;
+      this.loader.isLoading = true;
 
       const fetched = await apiFetch(`topic/${this.$route.params.id}/send`, {
         taskId: this.taskId,
@@ -97,8 +105,9 @@ export default {
 
       this.modal = true;
       this.loader.isLoading = false;
+      this.modal = true;
     },
-    async loadTask() {
+    loadTask: async function() {
       this.loader.isLoading = true;
       this.$store.commit("setAppBarTitle", "Загрузка...");
       const fetched = await apiFetch(`topic/${this.$route.params.id}/get`);
@@ -127,6 +136,28 @@ export default {
       this.$store.commit("setAppBarTitle", `Задание №${this.taskId}`);
 
       this.loader.isLoading = false;
+    }
+  },
+  watch: {
+    modalAction: function(action) {
+      this.modal = false;
+
+      switch (action) {
+        case "spam":
+          break;
+
+        case "update":
+          this.answer = "";
+          this.loadTask();
+          break;
+
+        case "again":
+          break;
+
+        default:
+          this.modal = true;
+          break;
+      }
     }
   }
 };

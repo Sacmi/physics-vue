@@ -1,29 +1,53 @@
 <template>
-  <v-dialog v-model="value" persistent>
+  <v-dialog v-model="show" persistent>
     <v-card>
       <v-card-title class="headline">Ответ отправлен</v-card-title>
       <v-card-text>
         Вы можете посмотреть результат (откроется оригинальный сайт), обновить
-        задание или заспамить ответ этого задания.
+        задание, заспамить ответ этого задания или ответить еще раз.
         <v-select :items="actions" label="Действие" v-model="selected" />
       </v-card-text>
       <v-card-actions>
-        <v-btn color="primary darken-1" text>Выбрать</v-btn>
+        <v-spacer></v-spacer>
+        <v-btn color="primary darken-1" @click="submit" text>Выбрать</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 <script>
 export default {
+  model: {
+    prop: "modelAction",
+    event: "changeAction"
+  },
   data: () => ({
-    actions: ["Обновить", "Посмотреть результат", "Заспамить ответ"],
+    actions: [
+      { text: "Обновить", value: "update" },
+      { text: "Посмотреть результат", value: "show" },
+      //{ text: "Заспамить ответ", value: "spam" },
+      { text: "Ответить еще раз", value: "again" }
+    ],
+
     selected: null
   }),
   props: {
-    value: Boolean
+    modelAction: String,
+    show: Boolean
   },
-  mounted() {
-    this.selected = this.actions[0];
+  methods: {
+    submit() {
+      switch (this.selected) {
+        case "update":
+        case "again":
+          this.$emit("changeAction", this.selected);
+          break;
+        case "spam":
+          break;
+        case "show":
+          window.open("http://test.apbphysics.ru/User/BallsPokaz", "_blank");
+          break;
+      }
+    }
   }
 };
 </script>
