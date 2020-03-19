@@ -11,7 +11,7 @@ const routes = [
     component: () => import("@/views/Home.vue")
   },
   {
-    path: "/login",
+    path: "/signin",
     name: "Login",
     component: () => import("@/views/Login.vue")
   },
@@ -19,6 +19,20 @@ const routes = [
     path: "/task/:id",
     name: "Task",
     component: () => import("@/views/Task.vue")
+  },
+  {
+    path: "/logout",
+    name: "Logout",
+    beforeEnter: (to, from, next) => {
+      store.commit("setSessionData", {
+        authCookie: null,
+        verificationCookie: null,
+        email: null
+      });
+
+      localStorage.setItem("autoSignIn", false);
+      next({ name: "Login" });
+    }
   }
 ];
 
@@ -27,7 +41,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const { verificationCookie, authCookie } = store.state;
+  const { verificationCookie, authCookie } = store.state.session;
 
   if ((!verificationCookie || !authCookie) && to.name != "Login")
     next({ name: "Login" });

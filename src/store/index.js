@@ -12,20 +12,24 @@ export default new Vuex.Store({
       isSpaming: false,
       topics: null
     },
-    appBarTitle: "Загрузка...",
-    authCookie: null,
-    verificationCookie: null
+    session: {
+      authCookie: null,
+      verificationCookie: null,
+      email: null
+    },
+    appBarTitle: "Загрузка..."
   },
   mutations: {
     setAppBarTitle(state, title) {
       state.appBarTitle = title;
     },
-    setLectureTopics(state, topics) {
-      state.lecture.topics = topics;
+    setLectureTopics({ lecture }, topics) {
+      lecture.topics = topics;
     },
-    setCookies(state, { authCookie, verificationCookie }) {
-      state.verificationCookie = verificationCookie;
-      state.authCookie = authCookie;
+    setSessionData({ session }, { authCookie, verificationCookie, email }) {
+      session.verificationCookie = verificationCookie;
+      session.authCookie = authCookie;
+      session.email = email;
     }
   },
   actions: {},

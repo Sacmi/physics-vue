@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-form v-model="valid" v-show="!loader.isLoading">
+    <v-form v-model="valid" v-if="!loader.isLoading">
       <v-img :src="image" transition="fade-transition" contain></v-img>
       <v-text-field
         v-model="answer"

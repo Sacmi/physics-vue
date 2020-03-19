@@ -20,6 +20,11 @@
         type="password"
         :disabled="isFetching"
       />
+      <v-checkbox
+        v-model="autoSignIn"
+        label="Авто-вход"
+        :disabled="isFetching"
+      />
       <v-btn
         block
         class="button"
@@ -54,10 +59,19 @@ export default {
     valid: null,
     isFetching: false,
     isError: false,
-    errorMessage: null
+    errorMessage: null,
+    autoSignIn: true
   }),
   mounted: function() {
     this.$store.commit("setAppBarTitle", "Вход");
+
+    this.autoSignIn = localStorage.getItem("autoSignIn") === "true";
+    if (!this.autoSignIn) return;
+
+    this.email = localStorage.getItem("email");
+    this.password = localStorage.getItem("password");
+
+    this.submit();
   },
   computed: {
     emailErrors: function() {
@@ -99,15 +113,19 @@ export default {
       }
       const { authCookie, verificationCookie } = res;
 
-      this.$store.commit("setCookies", { authCookie, verificationCookie });
-      this.$router.push({ name: "Home" });
+      this.$store.commit("setSessionData", {
+        authCookie,
+        verificationCookie,
+        email: this.email
+      });
+
+      localStorage.setItem("email", this.email);
+      localStorage.setItem("password", this.password);
+      localStorage.setItem("autoSignIn", this.autoSignIn);
+
       this.isFetching = false;
+      this.$router.push({ name: "Home" });
     }
   }
 };
 </script>
-<style scoped>
-.button {
-  margin-top: 8px;
-}
-</style>

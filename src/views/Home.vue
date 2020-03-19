@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-list v-show="!isLoading">
+    <v-list v-if="!isLoading">
       <v-subheader>Список тем</v-subheader>
       <v-list-item-group color="primary">
         <router-link
@@ -49,6 +49,6 @@ export default {
 
     this.isLoading = false;
   },
-  computed: mapState({ topics: state => state.lecture.topics })
+  computed: mapState({ topics: ({ lecture }) => lecture.topics })
 };
 </script>

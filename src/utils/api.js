@@ -3,10 +3,12 @@ import store from "@/store";
 const API_URL = "https://dry-waters-99332.herokuapp.com";
 
 export default function apiFetch(method, data) {
+  const { authCookie, verificationCookie } = store.state.session;
+
   const params = Object.assign(
     {
-      authCookie: store.state.authCookie,
-      verificationCookie: store.state.verificationCookie
+      authCookie,
+      verificationCookie
     },
     data
   );
