@@ -56,18 +56,18 @@ export default {
     isError: false,
     errorMessage: null
   }),
-  mounted() {
+  mounted: function() {
     this.$store.commit("setAppBarTitle", "Вход");
   },
   computed: {
-    emailErrors() {
+    emailErrors: function() {
       const errors = [];
       if (!this.$v.email.$dirty) return errors;
       !this.$v.email.email && errors.push("Это поле должно быть почтой");
       !this.$v.email.required && errors.push("Это поле необходимо.");
       return errors;
     },
-    passwordErrors() {
+    passwordErrors: function() {
       const errors = [];
       if (!this.$v.password.$dirty) return errors;
       !this.$v.password.minLength &&
@@ -77,7 +77,7 @@ export default {
     }
   },
   methods: {
-    async submit() {
+    submit: async function() {
       await this.$v.$touch();
 
       if (!this.valid) return;

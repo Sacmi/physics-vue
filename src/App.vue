@@ -15,7 +15,7 @@ export default {
   name: "App",
 
   computed: {
-    appBarTitle() {
+    appBarTitle: function() {
       return this.$store.state.appBarTitle;
     }
   }

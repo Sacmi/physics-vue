@@ -35,7 +35,7 @@ export default {
     show: Boolean
   },
   methods: {
-    submit() {
+    submit: function() {
       switch (this.selected) {
         case "update":
         case "again":

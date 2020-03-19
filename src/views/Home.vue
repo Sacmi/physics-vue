@@ -37,7 +37,7 @@ export default {
     isError: false,
     errorMessage: null
   }),
-  async mounted() {
+  mounted: async function() {
     this.$store.commit("setAppBarTitle", "Выбор темы");
 
     if (!this.topics) {
