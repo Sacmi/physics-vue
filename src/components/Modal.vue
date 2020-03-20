@@ -24,7 +24,7 @@ export default {
     actions: [
       { text: "Обновить", value: "update" },
       { text: "Посмотреть результат", value: "show" },
-      //{ text: "Заспамить ответ", value: "spam" },
+      { text: "Заспамить ответ", value: "spam" },
       { text: "Ответить еще раз", value: "again" }
     ],
 
@@ -42,6 +42,7 @@ export default {
           this.$emit("changeAction", this.selected);
           break;
         case "spam":
+          this.$router.push({ name: "Spam" });
           break;
         case "show":
           window.open("http://test.apbphysics.ru/User/BallsPokaz", "_blank");

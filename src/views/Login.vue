@@ -35,12 +35,12 @@
         Войти
       </v-btn>
     </v-form>
-    <v-snackbar bottom v-model="isFetching" :timeout="0"
-      >Выполняется вход...</v-snackbar
-    >
-    <v-snackbar :timeout="5000" bottom v-model="isError" color="red">{{
-      errorMessage
-    }}</v-snackbar>
+    <v-snackbar bottom v-model="isFetching" :timeout="0">
+      Выполняется вход...
+    </v-snackbar>
+    <v-snackbar :timeout="5000" bottom v-model="isError" color="red">
+      {{ errorMessage }}
+    </v-snackbar>
   </v-container>
 </template>
 <script>

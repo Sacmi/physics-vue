@@ -27,6 +27,18 @@ const routes = [
       import(/* webpackChunkName: "base" */ "@/views/Offline.vue")
   },
   {
+    path: "/spam",
+    name: "Spam",
+    component: () => import("@/views/Spam.vue"),
+    beforeEnter: (to, from, next) => {
+      const { answer, sessionCookie, taskId, topicId } = store.state.lecture;
+
+      if (!answer || !sessionCookie || !taskId || !topicId) {
+        next({ name: "Home" });
+      } else next();
+    }
+  },
+  {
     path: "/logout",
     name: "Logout",
     beforeEnter: (to, from, next) => {

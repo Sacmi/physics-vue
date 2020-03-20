@@ -17,11 +17,17 @@
         color="primary"
         @click="submit"
         :disabled="loader.isLoading"
-        >Ответить</v-btn
       >
-      <v-btn block class="button" @click="loadTask" :disabled="loader.isLoading"
-        >Пропустить</v-btn
+        Ответить
+      </v-btn>
+      <v-btn
+        block
+        class="button"
+        @click="loadTask"
+        :disabled="loader.isLoading"
       >
+        Пропустить
+      </v-btn>
     </v-form>
     <v-snackbar v-model="loader.isLoading" bottom :timeout="0">{{
       loader.text
@@ -90,12 +96,13 @@ export default {
       this.loader.text = "Отправка ответа...";
       this.loader.isLoading = true;
 
-      const fetched = await sendAnswer({
+      const requestData = {
         taskId: this.taskId,
         answer: this.answer,
         sessionCookie: this.sessionCookie,
         topicId: this.$route.params.id
-      });
+      };
+      const fetched = await sendAnswer(requestData);
 
       if (fetched.status !== 200) {
         this.loader.isLoading = false;
@@ -104,9 +111,10 @@ export default {
         return;
       }
 
+      this.$store.commit("setTaskData", requestData);
+
       this.modal = true;
       this.loader.isLoading = false;
-      this.modal = true;
     },
     loadTask: async function() {
       this.loader.isLoading = true;
@@ -124,7 +132,7 @@ export default {
             this.error.errorMessage = "Не удалось получить задание.";
             break;
         }
-        this.loader.isLoading = false;
+
         this.error.isError = true;
         return;
       }
@@ -154,11 +162,8 @@ export default {
 
         case "again":
           break;
-
-        default:
-          this.modal = true;
-          break;
       }
+      this.modalAction = "";
     }
   }
 };

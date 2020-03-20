@@ -1,23 +1,7 @@
 <template>
   <v-container>
-    <v-list v-if="!isLoading">
-      <v-subheader>Список тем</v-subheader>
-      <v-list-item-group color="primary">
-        <router-link
-          v-for="(topic, i) in topics"
-          :key="i"
-          :to="{ path: `/task/${i + 1}` }"
-          tag="span"
-        >
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title>{{ topic.title }}</v-list-item-title>
-              <v-list-item-subtitle>{{ topic.url }}</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </router-link>
-      </v-list-item-group>
-    </v-list>
+    <TopicsList v-if="!isLoading" v-model="topics" />
+
     <v-snackbar v-model="isLoading" bottom :timeout="0"
       >Получение данных...</v-snackbar
     >
@@ -30,8 +14,12 @@
 <script>
 import { getTopics } from "@/utils/api";
 import { mapState } from "vuex";
+import TopicsList from "@/components/TopicsList";
 
 export default {
+  components: {
+    TopicsList
+  },
   data: () => ({
     isLoading: true,
     isError: false,
