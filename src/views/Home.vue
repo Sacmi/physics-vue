@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import apiFetch from "@/utils/api";
+import { getTopics } from "@/utils/api";
 import { mapState } from "vuex";
 
 export default {
@@ -41,7 +41,7 @@ export default {
     this.$store.commit("setAppBarTitle", "Выбор темы");
 
     if (!this.topics) {
-      const fetched = await apiFetch("getTopics");
+      const fetched = await getTopics();
 
       if (fetched.status !== 200) this.$router.push({ name: "Login" });
       this.$store.commit("setLectureTopics", await fetched.json());

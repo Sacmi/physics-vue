@@ -35,7 +35,7 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required, numeric } from "vuelidate/lib/validators";
-import apiFetch from "@/utils/api";
+import { getTask, sendAnswer } from "@/utils/api";
 
 import Modal from "@/components/Modal.vue";
 
@@ -90,10 +90,11 @@ export default {
       this.loader.text = "Отправка ответа...";
       this.loader.isLoading = true;
 
-      const fetched = await apiFetch(`topic/${this.$route.params.id}/send`, {
+      const fetched = await sendAnswer({
         taskId: this.taskId,
         answer: this.answer,
-        sessionCookie: this.sessionCookie
+        sessionCookie: this.sessionCookie,
+        topicId: this.$route.params.id
       });
 
       if (fetched.status !== 200) {
@@ -110,7 +111,7 @@ export default {
     loadTask: async function() {
       this.loader.isLoading = true;
       this.$store.commit("setAppBarTitle", "Загрузка...");
-      const fetched = await apiFetch(`topic/${this.$route.params.id}/get`);
+      const fetched = await getTask({ topicId: this.$route.params.id });
 
       if (fetched.status !== 200) {
         switch (fetched.status) {

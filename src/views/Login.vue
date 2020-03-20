@@ -31,8 +31,9 @@
         color="primary"
         @click="submit"
         :disabled="isFetching"
-        >Войти</v-btn
       >
+        Войти
+      </v-btn>
     </v-form>
     <v-snackbar bottom v-model="isFetching" :timeout="0"
       >Выполняется вход...</v-snackbar
@@ -45,7 +46,7 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required, minLength, email } from "vuelidate/lib/validators";
-import apiFetch from "@/utils/api";
+import { signIn } from "@/utils/api";
 
 export default {
   mixins: [validationMixin],
@@ -97,7 +98,7 @@ export default {
       if (!this.valid) return;
 
       this.isFetching = true;
-      const fetched = await apiFetch("getAuthData", {
+      const fetched = await signIn({
         email: this.email,
         password: this.password
       });
