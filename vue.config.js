@@ -4,11 +4,14 @@ module.exports = {
   transpileDependencies: ["vuetify"],
 
   configureWebpack: {
-    devtool: "source-map"
-    //plugins: [new JavaScriptObfuscator({ selfDefending: true })]
+    devtool: "source-map",
+    plugins:
+      process.env.NODE_ENV === "production"
+        ? [new JavaScriptObfuscator({ selfDefending: true })]
+        : []
   },
 
-  //publicPath: "/physics-client/",
+  publicPath: process.env.NODE_ENV === "production" ? "/physics-client/" : "/",
   productionSourceMap: false,
 
   pwa: {
