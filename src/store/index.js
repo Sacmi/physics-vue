@@ -6,7 +6,6 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     lecture: {
-      sessionCookie: null,
       taskId: null,
       topicId: null,
       answer: null,
@@ -31,11 +30,10 @@ export default new Vuex.Store({
       session.authCookie = authCookie;
       session.email = email;
     },
-    setTaskData({ lecture }, { taskId, topicId, answer, sessionCookie }) {
+    setTaskData({ lecture }, { taskId, topicId, answer }) {
       lecture.answer = answer;
       lecture.taskId = taskId;
       lecture.topicId = topicId;
-      lecture.sessionCookie = sessionCookie;
     }
   },
   actions: {},

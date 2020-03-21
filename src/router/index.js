@@ -31,9 +31,9 @@ const routes = [
     name: "Spam",
     component: () => import("@/views/Spam.vue"),
     beforeEnter: (to, from, next) => {
-      const { answer, sessionCookie, taskId, topicId } = store.state.lecture;
+      const { answer, taskId, topicId } = store.state.lecture;
 
-      if (!answer || !sessionCookie || !taskId || !topicId) {
+      if (!answer || !taskId || !topicId) {
         next({ name: "Home" });
       } else next();
     }

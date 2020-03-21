@@ -19,12 +19,6 @@
         <v-list-item-subtitle>{{ lecture.answer }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
-    <v-list-item two-line>
-      <v-list-item-content>
-        <v-list-item-title>Сессия</v-list-item-title>
-        <v-list-item-subtitle>{{ lecture.sessionCookie }}</v-list-item-subtitle>
-      </v-list-item-content>
-    </v-list-item>
   </div>
 </template>
 <script>

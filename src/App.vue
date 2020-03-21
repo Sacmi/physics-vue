@@ -5,7 +5,7 @@
       <v-toolbar-title>{{ appBarTitle }}</v-toolbar-title>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" app touchless temporary>
+    <v-navigation-drawer v-model="drawer" app :touchless="showDrawer" temporary>
       <DrawerList />
     </v-navigation-drawer>
 

@@ -1,9 +1,7 @@
 <template>
   <v-container>
     <v-alert type="warning">
-      Спам ответа - довольно нестабильная херня. Сайт может считать правильный
-      ответ неправильным. Я ищу способ пофиксить это, а пока лучше не
-      использовать это. Это просто прототип.
+      Это прототип. Может не работать.
     </v-alert>
     <v-form>
       <v-subheader class="pl-0">
@@ -62,14 +60,14 @@
 
 <script>
 import SpamListItems from "@/components/SpamListItems";
-import { sendAnswer } from "@/utils/api";
+import { sendAnswer, getTask } from "@/utils/api";
 
 export default {
   components: {
     SpamListItems
   },
   data: () => ({
-    iter: null,
+    iter: 0,
     current: 1,
     toSpam: 1,
     sheet: false,
@@ -85,15 +83,24 @@ export default {
       this.isSpamming = true;
       this.iter = 0;
 
-      for (let i = 0; i < this.toSpam - this.current; i++) {
-        this.iter++;
+      for (this.iter = 0; this.iter < this.toSpam - this.current; this.iter++) {
+        const { taskId, topicId, answer } = this.$store.state.lecture;
+        let sessionCookie = null;
 
-        const {
-          taskId,
-          topicId,
-          answer,
-          sessionCookie
-        } = this.$store.state.lecture;
+        while (!sessionCookie) {
+          const fetched = await getTask({ topicId });
+
+          if (fetched.status !== 200) {
+            this.isSpamming = false;
+            this.isError = true;
+
+            return;
+          }
+
+          const res = await fetched.json();
+
+          if (res.taskId === taskId) sessionCookie = res.sessionCookie;
+        }
 
         const fetched = await sendAnswer({
           taskId,
