@@ -118,7 +118,10 @@ export default {
 
         res = await fetched.json();
       } catch (error) {
-        this.setError("Не удалось выполнить запрос к серверу");
+        if (error instanceof SyntaxError)
+          this.setError("Сервер вернул некорректные данные");
+        else this.setError("Не удалось выполнить запрос к серверу");
+
         return;
       }
 
@@ -142,9 +145,9 @@ export default {
       this.$router.push({ name: "Home" });
     },
     setError: function(message) {
+      this.isFetching = false;
       this.error.message = message;
       this.error.isError = true;
-      this.isFetching = false;
     }
   }
 };

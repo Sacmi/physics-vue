@@ -80,40 +80,36 @@ export default {
   },
   methods: {
     startSpamming: async function() {
+      const { toSpam, current } = this;
       this.isSpamming = true;
       this.iter = 0;
 
-      for (this.iter = 0; this.iter < this.toSpam - this.current; this.iter++) {
-        const { taskId, topicId, answer } = this.$store.state.lecture;
-        let sessionCookie = null;
+      try {
+        for (this.iter = 0; this.iter < toSpam - current; this.iter++) {
+          const { taskId, topicId, answer } = this.$store.state.lecture;
+          let sessionCookie = null;
 
-        while (!sessionCookie) {
-          const fetched = await getTask({ topicId });
+          while (!sessionCookie) {
+            const fetched = await getTask({ topicId });
+            if (fetched.status !== 200) throw new Error("not OK");
 
-          if (fetched.status !== 200) {
-            this.isSpamming = false;
-            this.isError = true;
-
-            return;
+            const res = await fetched.json();
+            if (res.taskId === taskId) sessionCookie = res.sessionCookie;
           }
 
-          const res = await fetched.json();
+          const fetched = await sendAnswer({
+            taskId,
+            topicId,
+            answer,
+            sessionCookie
+          });
 
-          if (res.taskId === taskId) sessionCookie = res.sessionCookie;
+          if (fetched.status !== 200) throw new Error("not OK");
         }
-
-        const fetched = await sendAnswer({
-          taskId,
-          topicId,
-          answer,
-          sessionCookie
-        });
-
-        if (fetched.status !== 200) {
-          this.isSpamming = false;
-          this.isError = true;
-          return;
-        }
+      } catch (error) {
+        this.isSpamming = false;
+        this.isError = true;
+        return;
       }
 
       this.isSpamming = false;

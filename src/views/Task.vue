@@ -33,7 +33,7 @@
       loader.text
     }}</v-snackbar>
     <v-snackbar :timeout="5000" bottom v-model="error.isError" color="red">{{
-      error.errorMessage
+      error.message
     }}</v-snackbar>
     <Modal v-model="modalAction" :show="modal" />
   </v-container>
@@ -61,7 +61,7 @@ export default {
 
     error: {
       isError: false,
-      errorMessage: null
+      message: null
     },
 
     taskId: null,
@@ -102,13 +102,13 @@ export default {
         sessionCookie: this.sessionCookie,
         topicId: this.$route.params.id
       };
-      const fetched = await sendAnswer(requestData);
 
-      if (fetched.status !== 200) {
-        this.loader.isLoading = false;
-        this.error.isError = true;
-        this.error.errorMessage = "Не удалось отправить ответ.";
-        return;
+      try {
+        const fetched = await sendAnswer(requestData);
+
+        if (fetched.status !== 200) throw new Error("not OK");
+      } catch (error) {
+        this.showError("Не удалось отправить ответ.");
       }
 
       this.$store.commit("setTaskData", requestData);
@@ -145,6 +145,11 @@ export default {
       this.$store.commit("setAppBarTitle", `Задание №${this.taskId}`);
 
       this.loader.isLoading = false;
+    },
+    showError: function(message) {
+      this.loader.isLoading = false;
+      this.error.isError = true;
+      this.error.message = message;
     }
   },
   watch: {
