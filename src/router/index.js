@@ -1,5 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+
+import LoginView from "@/views/Login.vue";
 import store from "@/store";
 
 Vue.use(VueRouter);
@@ -13,7 +15,7 @@ const routes = [
   {
     path: "/signin",
     name: "Login",
-    component: () => import(/* webpackChunkName: "base" */ "@/views/Login.vue")
+    component: LoginView
   },
   {
     path: "/task/:id",
@@ -23,8 +25,7 @@ const routes = [
   {
     path: "/offline",
     name: "Offline",
-    component: () =>
-      import(/* webpackChunkName: "base" */ "@/views/Offline.vue")
+    component: () => import("@/views/Offline.vue")
   },
   {
     path: "/spam",
