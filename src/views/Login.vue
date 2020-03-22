@@ -38,8 +38,13 @@
     <v-snackbar bottom v-model="isFetching" :timeout="0">
       Выполняется вход...
     </v-snackbar>
-    <v-snackbar :timeout="5000" bottom v-model="isError" color="red">
-      {{ errorMessage }}
+    <v-snackbar
+      :timeout="error.timeout"
+      bottom
+      v-model="error.isError"
+      color="red"
+    >
+      {{ error.message }}
     </v-snackbar>
   </v-container>
 </template>
@@ -58,10 +63,14 @@ export default {
     email: null,
     password: null,
     valid: null,
+    error: {
+      isError: false,
+      message: "",
+      timeout: 5000
+    },
     isFetching: false,
-    isError: false,
-    errorMessage: null,
-    autoSignIn: null
+
+    autoSignIn: false
   }),
   mounted: function() {
     this.$store.commit("setAppBarTitle", "Вход");
@@ -98,18 +107,23 @@ export default {
       if (!this.valid) return;
 
       this.isFetching = true;
-      const fetched = await signIn({
-        email: this.email,
-        password: this.password
-      });
-      const res = await fetched.json();
+      this.error.isError = false;
+      let fetched, res;
+
+      try {
+        fetched = await signIn({
+          email: this.email,
+          password: this.password
+        });
+
+        res = await fetched.json();
+      } catch (error) {
+        this.setError("Не удалось выполнить запрос к серверу");
+        return;
+      }
 
       if (fetched.status !== 200 || !res.authCookie) {
-        this.errorMessage = res.message
-          ? res.message
-          : "Неверный логин или пароль";
-        this.isError = true;
-        this.isFetching = false;
+        this.setError(res.message ? res.message : "Неверный логин или пароль");
         return;
       }
       const { authCookie, verificationCookie } = res;
@@ -126,6 +140,11 @@ export default {
 
       this.isFetching = false;
       this.$router.push({ name: "Home" });
+    },
+    setError: function(message) {
+      this.error.message = message;
+      this.error.isError = true;
+      this.isFetching = false;
     }
   }
 };

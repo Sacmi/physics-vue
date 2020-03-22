@@ -6,7 +6,7 @@
           {{ $store.state.session.email }}
         </v-list-item-title>
         <v-list-item-subtitle>
-          http://test.apbphysics.ru/
+          {{ $store.state.apiUrl }}
         </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>

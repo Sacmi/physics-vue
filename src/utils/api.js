@@ -2,7 +2,7 @@ import store from "@/store";
 
 const sendReq = (methodUrl, data = {}) => {
   const { authCookie, verificationCookie } = store.state.session;
-  const API_URL = "https://dry-waters-99332.herokuapp.com";
+  const { apiUrl } = store.state;
 
   const req = Object.assign(
     {
@@ -12,7 +12,7 @@ const sendReq = (methodUrl, data = {}) => {
     data
   );
 
-  return fetch(`${API_URL}/${methodUrl}`, {
+  return fetch(`${apiUrl}/${methodUrl}`, {
     body: JSON.stringify(req),
     headers: {
       Accept: "application/json",

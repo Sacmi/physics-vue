@@ -16,7 +16,8 @@ export default new Vuex.Store({
       verificationCookie: null,
       email: null
     },
-    appBarTitle: "Загрузка..."
+    appBarTitle: "Загрузка...",
+    apiUrl: "https://dry-waters-99332.herokuapp.com"
   },
   mutations: {
     setAppBarTitle(state, title) {
@@ -34,6 +35,9 @@ export default new Vuex.Store({
       lecture.answer = answer;
       lecture.taskId = taskId;
       lecture.topicId = topicId;
+    },
+    setApiUrl(store, url) {
+      store.apiUrl = url;
     }
   },
   actions: {},

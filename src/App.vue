@@ -25,6 +25,11 @@ export default {
   components: {
     DrawerList
   },
+  created: function() {
+    const url = localStorage.getItem("apiUrl");
+
+    if (url) this.$store.commit("setApiUrl", url);
+  },
   computed: {
     showDrawer: function() {
       const { name } = this.$route;
