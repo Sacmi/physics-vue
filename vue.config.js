@@ -11,7 +11,10 @@ module.exports = {
         : []
   },
 
-  publicPath: process.env.NODE_ENV === "production" ? "/physics-client/" : "/",
+  publicPath:
+    process.env.NODE_ENV === "production"
+      ? "https://apbphysics.github.io/"
+      : "/",
   productionSourceMap: false,
 
   pwa: {
